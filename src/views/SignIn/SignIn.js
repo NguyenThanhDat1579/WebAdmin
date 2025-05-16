@@ -8,26 +8,19 @@ import {
   Button,
   IconButton,
   TextField,
-  Link,
   Typography
 } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-import { Facebook as FacebookIcon, Google as GoogleIcon } from 'icons';
 
 const schema = {
   email: {
     presence: { allowEmpty: false, message: 'is required' },
     email: true,
-    length: {
-      maximum: 64
-    }
+    length: { maximum: 64 }
   },
   password: {
     presence: { allowEmpty: false, message: 'is required' },
-    length: {
-      maximum: 128
-    }
+    length: { maximum: 128 }
   }
 };
 
@@ -70,7 +63,6 @@ const useStyles = makeStyles(theme => ({
   bio: {
     color: theme.palette.white
   },
-  contentContainer: {},
   content: {
     height: '100%',
     display: 'flex',
@@ -83,9 +75,6 @@ const useStyles = makeStyles(theme => ({
     paddingBototm: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2)
-  },
-  logoImage: {
-    marginLeft: theme.spacing(4)
   },
   contentBody: {
     flexGrow: 1,
@@ -108,15 +97,6 @@ const useStyles = makeStyles(theme => ({
   title: {
     marginTop: theme.spacing(3)
   },
-  socialButtons: {
-    marginTop: theme.spacing(3)
-  },
-  socialIcon: {
-    marginRight: theme.spacing(1)
-  },
-  sugestion: {
-    marginTop: theme.spacing(2)
-  },
   textField: {
     marginTop: theme.spacing(2)
   },
@@ -127,7 +107,6 @@ const useStyles = makeStyles(theme => ({
 
 const SignIn = props => {
   const { history } = props;
-
   const classes = useStyles();
 
   const [formState, setFormState] = useState({
@@ -172,7 +151,20 @@ const SignIn = props => {
 
   const handleSignIn = event => {
     event.preventDefault();
-    history.push('/');
+
+    const { email, password } = formState.values;
+
+    if (email === 'admin@gmail.com' && password === 'admin') {
+      history.push('/dashboard');
+    } else {
+      setFormState(formState => ({
+        ...formState,
+        errors: {
+          ...formState.errors,
+          general: ['Email hoặc mật khẩu không đúng']
+        }
+      }));
+    }
   };
 
   const hasError = field =>
@@ -180,47 +172,26 @@ const SignIn = props => {
 
   return (
     <div className={classes.root}>
-      <Grid
-        className={classes.grid}
-        container
-      >
-        <Grid
-          className={classes.quoteContainer}
-          item
-          lg={5}
-        >
+      <Grid className={classes.grid} container>
+        <Grid className={classes.quoteContainer} item lg={5}>
           <div className={classes.quote}>
             <div className={classes.quoteInner}>
-              <Typography
-                className={classes.quoteText}
-                variant="h1"
-              >
+              <Typography className={classes.quoteText} variant="h1">
                 Hella narwhal Cosby sweater McSweeney's, salvia kitsch before
                 they sold out High Life.
               </Typography>
               <div className={classes.person}>
-                <Typography
-                  className={classes.name}
-                  variant="body1"
-                >
+                <Typography className={classes.name} variant="body1">
                   Takamaru Ayako
                 </Typography>
-                <Typography
-                  className={classes.bio}
-                  variant="body2"
-                >
+                <Typography className={classes.bio} variant="body2">
                   Manager at inVision
                 </Typography>
               </div>
             </div>
           </div>
         </Grid>
-        <Grid
-          className={classes.content}
-          item
-          lg={7}
-          xs={12}
-        >
+        <Grid className={classes.content} item lg={7} xs={12}>
           <div className={classes.content}>
             <div className={classes.contentHeader}>
               <IconButton onClick={handleBack}>
@@ -228,19 +199,11 @@ const SignIn = props => {
               </IconButton>
             </div>
             <div className={classes.contentBody}>
-              <form
-                className={classes.form}
-                onSubmit={handleSignIn}
-              >
-                <Typography
-                  className={classes.title}
-                  variant="h2"
-                >
+              <form className={classes.form} onSubmit={handleSignIn}>
+                <Typography className={classes.title} variant="h2">
                   Login Admin
                 </Typography>
-               
-          
-              
+
                 <TextField
                   className={classes.textField}
                   error={hasError('email')}
@@ -269,6 +232,11 @@ const SignIn = props => {
                   value={formState.values.password || ''}
                   variant="outlined"
                 />
+                {formState.errors.general && (
+                  <Typography color="error" variant="body2">
+                    {formState.errors.general[0]}
+                  </Typography>
+                )}
                 <Button
                   className={classes.signInButton}
                   color="primary"
@@ -276,11 +244,9 @@ const SignIn = props => {
                   fullWidth
                   size="large"
                   type="submit"
-                  variant="contained"
-                >
+                  variant="contained">
                   Sign in now
                 </Button>
-               
               </form>
             </div>
           </div>
