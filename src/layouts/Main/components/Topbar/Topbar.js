@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-  const { className, onSidebarOpen, ...rest } = props;
+const { className, onSidebarOpen, staticContext, ...rest } = props;
   const { history } = props;
   const classes = useStyles();
 

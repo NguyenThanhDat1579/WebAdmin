@@ -10,6 +10,6 @@ const axiosInstance = axios.create({
   }
 });
 
-// Bạn có thể thêm interceptor nếu muốn, hiện tại để đơn giản nên không cần
+
 
 export default axiosInstance;
