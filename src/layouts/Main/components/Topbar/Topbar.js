@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Topbar = props => {
-const { className, onSidebarOpen, staticContext, ...rest } = props;
+  const { className, onSidebarOpen, staticContext, ...rest } = props;
   const { history } = props;
   const classes = useStyles();
 
@@ -34,7 +34,12 @@ const { className, onSidebarOpen, staticContext, ...rest } = props;
     <AppBar {...rest} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
-          <img alt="Logo" src="/images/logos/logo--white.svg" />
+          <img
+            alt="Logo"
+            src="/images/logos/logo-Event.png"
+            width="200"
+            height="40"
+          />
         </RouterLink>
         <div className={classes.flexGrow} />
         <Hidden mdDown>

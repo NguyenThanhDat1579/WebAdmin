@@ -43,7 +43,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UsersTable = props => {
-  const { className, ...rest } = props;
+  const { className, searchTerm, selectedRole, ...rest } = props;
+
   const classes = useStyles();
 
   const [selectedUsers, setSelectedUsers] = useState([]);
@@ -63,6 +64,17 @@ const UsersTable = props => {
 
     fetchUsers();
   }, []);
+
+  const filteredUsers = users.filter(user => {
+    const matchSearch =
+      !searchTerm ||
+      user.username.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchRole = selectedRole === null || user.role === selectedRole;
+
+    return matchSearch && matchRole;
+  });
 
   const handleSelectAll = event => {
     let selectedUsers;
@@ -121,15 +133,17 @@ const UsersTable = props => {
                       onChange={handleSelectAll}
                     />
                   </TableCell>
-                  <TableCell>Username</TableCell>
+                  <TableCell>Tên người dùng</TableCell>
                   <TableCell>Email</TableCell>
-                  <TableCell>Location</TableCell>
-                  <TableCell>Phone</TableCell>
-                  <TableCell>Registration date</TableCell>
+                  {/* <TableCell>Location</TableCell> */}
+                  <TableCell>Số điện thoại</TableCell>
+                  <TableCell>Ngày đăng ký</TableCell>
+                  <TableCell>Vai trò</TableCell>
+                  <TableCell></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {users
+                {filteredUsers
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map(user => (
                     <TableRow
@@ -159,13 +173,40 @@ const UsersTable = props => {
                         </div>
                       </TableCell>
                       <TableCell>{user.email}</TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         {user.address?.city}, {user.address?.state},{' '}
                         {user.address?.country}
+                      </TableCell> */}
+                      <TableCell>
+                        {user.phoneNumber ? `0${user.phoneNumber}` : ''}
                       </TableCell>
-                      <TableCell>{user.phone}</TableCell>
+
                       <TableCell>
                         {moment(user.createdAt).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell>
+                        {user.role === 3
+                          ? 'Người dùng'
+                          : user.role === 2
+                          ? 'Nhà tổ chức'
+                          : 'Khác'}
+                      </TableCell>
+                      <TableCell>
+                        <button
+                          onClick={e => {
+                            console.log('Clicked user:', user);
+                          }}
+                          style={{
+                            cursor: 'pointer',
+                            color: '#1976d2',
+                            background: 'none',
+                            border: 'none',
+                            textDecoration: 'underline',
+                            padding: 0,
+                            fontSize: '0.875rem'
+                          }}>
+                          Xem chi tiết
+                        </button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -190,7 +231,13 @@ const UsersTable = props => {
 };
 
 UsersTable.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  searchTerm: PropTypes.string,
+  selectedRole: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.oneOf([null])
+  ])
 };
 
 export default UsersTable;
