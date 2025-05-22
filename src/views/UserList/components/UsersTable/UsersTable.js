@@ -43,7 +43,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UsersTable = props => {
-  const { className, searchTerm, selectedRole, ...rest } = props;
+  const { className, searchTerm, selectedRole, onViewDetail, ...rest } = props;
 
   const classes = useStyles();
 
@@ -194,7 +194,7 @@ const UsersTable = props => {
                       <TableCell>
                         <button
                           onClick={e => {
-                            console.log('Clicked user:', user);
+                            if (onViewDetail) onViewDetail(user);
                           }}
                           style={{
                             cursor: 'pointer',
@@ -237,7 +237,8 @@ UsersTable.propTypes = {
     PropTypes.string,
     PropTypes.number,
     PropTypes.oneOf([null])
-  ])
+  ]),
+  onViewDetail: PropTypes.func // <-- thêm dòng này
 };
 
 export default UsersTable;
