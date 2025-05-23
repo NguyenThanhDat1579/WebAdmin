@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import { Button } from '@material-ui/core';
+import { Button, ButtonGroup } from '@material-ui/core';
 
 import { SearchInput } from 'components';
 
@@ -17,35 +17,28 @@ const useStyles = makeStyles(theme => ({
   spacer: {
     flexGrow: 1
   },
-  importButton: {
-    marginRight: theme.spacing(1)
-  },
-  exportButton: {
-    marginRight: theme.spacing(1)
-  },
   searchInput: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(2)
   }
 }));
 
 const UsersToolbar = props => {
-  const { className, ...rest } = props;
+  const {
+    className,
+    onSearchChange,
+    onFilterRole,
+    selectedRole,
+    searchTerm,
+    ...rest
+  } = props;
 
   const classes = useStyles();
 
   return (
-    <div
-      {...rest}
-      className={clsx(classes.root, className)}
-    >
+    <div {...rest} className={clsx(classes.root, className)}>
       <div className={classes.row}>
         <span className={classes.spacer} />
-        <Button className={classes.importButton}>Import</Button>
-        <Button className={classes.exportButton}>Export</Button>
-        <Button
-          color="primary"
-          variant="contained"
-        >
+        <Button color="primary" variant="contained">
           Add user
         </Button>
       </div>
@@ -53,14 +46,38 @@ const UsersToolbar = props => {
         <SearchInput
           className={classes.searchInput}
           placeholder="Search user"
+          value={searchTerm}
+          onChange={onSearchChange}
         />
+
+        <ButtonGroup variant="outlined" color="primary">
+          <Button
+            variant={selectedRole === null ? 'contained' : 'outlined'}
+            onClick={() => onFilterRole(null)}>
+            Tất cả
+          </Button>
+          <Button
+            variant={selectedRole === 3 ? 'contained' : 'outlined'}
+            onClick={() => onFilterRole(3)}>
+            Người dùng
+          </Button>
+          <Button
+            variant={selectedRole === 2 ? 'contained' : 'outlined'}
+            onClick={() => onFilterRole(2)}>
+            Nhà tổ chức
+          </Button>
+        </ButtonGroup>
       </div>
     </div>
   );
 };
 
 UsersToolbar.propTypes = {
-  className: PropTypes.string
+  className: PropTypes.string,
+  onSearchChange: PropTypes.func.isRequired,
+  onFilterRole: PropTypes.func.isRequired,
+  selectedRole: PropTypes.number,
+  searchTerm: PropTypes.string
 };
 
 export default UsersToolbar;
