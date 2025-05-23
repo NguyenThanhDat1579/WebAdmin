@@ -1,5 +1,3 @@
-// components/EventCard.js
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
@@ -13,9 +11,12 @@ import {
 } from '@material-ui/core';
 import RoomIcon from '@material-ui/icons/Room';
 import AccessTimeIcon from '@material-ui/icons/AccessTime';
+import { useHistory } from 'react-router-dom'; // 👈 Thêm dòng này
 
 const useStyles = makeStyles(theme => ({
-  root: {},
+  root: {
+    cursor: 'pointer' // 👈 Đổi con trỏ khi hover
+  },
   imageContainer: {
     height: 180,
     width: '100%',
@@ -40,9 +41,14 @@ const useStyles = makeStyles(theme => ({
 
 const EventCard = ({ className, event, ...rest }) => {
   const classes = useStyles();
+  const history = useHistory(); // 👈 Khởi tạo history
+
+  const handleClick = () => {
+    history.push(`/events/detail/${event._id}`); // 👈 Điều hướng khi bấm vào
+  };
 
   return (
-    <Card {...rest} className={clsx(classes.root, className)}>
+    <Card {...rest} className={clsx(classes.root, className)} onClick={handleClick}>
       <CardContent>
         <div className={classes.imageContainer}>
           <img alt={event.name} className={classes.image} src={event.avatar} />
