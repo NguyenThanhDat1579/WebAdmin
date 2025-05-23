@@ -14,7 +14,8 @@ import {
   Settings as SettingsView,
   SignUp as SignUpView,
   SignIn as SignInView,
-  NotFound as NotFoundView
+  NotFound as NotFoundView,
+  EventDetail as EventDetailView
 } from './views';
 
 const Routes = () => {
@@ -40,6 +41,13 @@ const Routes = () => {
         layout={MainLayout}
         path="/events"
       />
+      <RouteWithLayout
+        component={EventDetailView}
+        exact
+        layout={MainLayout}
+        path="/events/detail/:eventId"
+      />
+
 
       <RouteWithLayout
         component={TypographyView}
